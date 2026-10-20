@@ -103,11 +103,6 @@ services:
       timeout: 5s
       retries: 10
 
-volumes:
-  appstorage:
-  pgdata:
-  redisdata:
-
 networks:
   default: {}
   caddy:
