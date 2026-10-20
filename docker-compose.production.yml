@@ -68,7 +68,7 @@ services:
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_123456789}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-whsec_test_123456789}
     volumes:
-      - appstorage:/app/backend/storage
+      - /home/pi/AppData/tickets/storage:/app/backend/storage
     depends_on:
       postgres:
         condition: service_healthy
@@ -83,7 +83,7 @@ services:
       POSTGRES_USER: hievents
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in Dockhand}
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - /home/pi/AppData/tickets/postgres:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
@@ -96,7 +96,7 @@ services:
     restart: unless-stopped
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
-      - redisdata:/data
+      - /home/pi/AppData/tickets/redis:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
