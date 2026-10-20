@@ -4,9 +4,7 @@
 # Use a NEW Dockhand stack name to create fresh, separate data volumes.
 services:
   all-in-one:
-    build:
-      context: .
-      dockerfile: Dockerfile.all-in-one
+    image: ${HI_EVENTS_IMAGE:?Set HI_EVENTS_IMAGE to the image from GitHub Actions}
     restart: unless-stopped
     command:
       - /bin/sh
