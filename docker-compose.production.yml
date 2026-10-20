@@ -1,0 +1,115 @@
+# Add this file to the root of your Hi.Events GitHub fork.
+# Dockhand: Compose file = docker-compose.production.yml; Context directory = .
+# Requires the existing Caddy Docker Proxy on the external network named caddy.
+# Use a NEW Dockhand stack name to create fresh, separate data volumes.
+services:
+  all-in-one:
+    build:
+      context: .
+      dockerfile: Dockerfile.all-in-one
+    restart: unless-stopped
+    command:
+      - /bin/sh
+      - -ec
+      - |
+        mkdir -p /app/backend/storage/app/public \
+          /app/backend/storage/framework/cache/data \
+          /app/backend/storage/framework/sessions \
+          /app/backend/storage/framework/views \
+          /app/backend/storage/logs
+        exec /startup.sh
+    networks:
+      - default
+      - caddy
+    labels:
+      caddy: tickets.bugeja.com.mt
+      caddy.reverse_proxy: "{{upstreams 80}}"
+      caddy_ingress_network: caddy
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_NAME: Hi.Events
+      APP_KEY: ${APP_KEY:?Set APP_KEY in Dockhand}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in Dockhand}
+      APP_URL: ${PUBLIC_URL:?Set PUBLIC_URL in Dockhand}
+      APP_FRONTEND_URL: ${PUBLIC_URL:?Set PUBLIC_URL in Dockhand}
+      APP_CDN_URL: ${PUBLIC_URL:?Set PUBLIC_URL in Dockhand}/storage
+      APP_DISABLE_REGISTRATION: ${APP_DISABLE_REGISTRATION:-false}
+      APP_SAAS_MODE_ENABLED: "true"
+      APP_STRIPE_CONNECT_ACCOUNT_TYPE: "standard"
+      APP_LICENCE_KEY: ${APP_LICENCE_KEY:-}
+      APP_TRUSTED_PROXIES: "*"
+      VITE_APP_NAME: tickets.mt
+      VITE_FRONTEND_URL: ${PUBLIC_URL:?Set PUBLIC_URL in Dockhand}
+      VITE_API_URL_CLIENT: ${PUBLIC_URL:?Set PUBLIC_URL in Dockhand}/api
+      VITE_API_URL_SERVER: http://localhost:80/api
+      VITE_STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLIC_KEY:-pk_test_123456789}
+      LOG_CHANNEL: stderr
+      DATABASE_URL: postgresql://hievents:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in Dockhand}@postgres:5432/hievents
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: ""
+      QUEUE_CONNECTION: redis
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      WEBHOOK_QUEUE_NAME: webhook-queue
+      FILESYSTEM_PUBLIC_DISK: public
+      FILESYSTEM_PRIVATE_DISK: local
+      MAIL_MAILER: ${MAIL_MAILER:-log}
+      MAIL_DRIVER: ${MAIL_MAILER:-log}
+      MAIL_HOST: ${MAIL_HOST:-localhost}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      MAIL_ENCRYPTION: ${MAIL_ENCRYPTION:-tls}
+      MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS:-hello@example.com}
+      MAIL_FROM_NAME: Hi.Events
+      STRIPE_PUBLIC_KEY: ${STRIPE_PUBLIC_KEY:-pk_test_123456789}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_123456789}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-whsec_test_123456789}
+    volumes:
+      - appstorage:/app/backend/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: hievents
+      POSTGRES_USER: hievents
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in Dockhand}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  appstorage:
+  pgdata:
+  redisdata:
+
+networks:
+  default: {}
+  caddy:
+    external: true
+    name: caddy
