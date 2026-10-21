@@ -38,8 +38,8 @@ services:
       APP_LICENCE_KEY: ${APP_LICENCE_KEY:-}
       APP_TRUSTED_PROXIES: "*"
       VITE_APP_NAME: tickets.mt
-      VITE_APP_LOGO_LIGHT: "${PUBLIC_URL}/storage/branding/logo.png"
-      VITE_APP_LOGO_DARK: "${PUBLIC_URL}/storage/branding/logo-darkbg.png"
+      VITE_APP_LOGO_LIGHT: "${PUBLIC_URL}/storage/branding/logo-darkbg.png"
+      VITE_APP_LOGO_DARK: "${PUBLIC_URL}/storage/branding/logo-dark.png"
       VITE_APP_FAVICON: "${PUBLIC_URL}/storage/branding/favicon.svg?v=1"
       APP_EMAIL_LOGO_URL: ${APP_EMAIL_LOGO_URL:-}
       APP_EMAIL_LOGO_LINK_URL: ${PUBLIC_URL}
