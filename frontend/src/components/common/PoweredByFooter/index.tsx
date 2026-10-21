@@ -88,7 +88,8 @@ export const PoweredByFooter = (
         </>
     );
 
-    return (
+    return null;
+    /* return (
         <div {...props} className={classNames(classes.poweredBy, props.className)}>
             <div className={classes.poweredByText}>
                 {footerContent}
@@ -99,5 +100,5 @@ export const PoweredByFooter = (
                 </div>
             )}
         </div>
-    );
+    ); */
 }
