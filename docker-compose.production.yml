@@ -26,7 +26,7 @@ services:
     environment:
       APP_ENV: production
       APP_DEBUG: "false"
-      APP_NAME: Hi.Events
+      APP_NAME: ticket.mt
       APP_KEY: ${APP_KEY:?Set APP_KEY in Dockhand}
       JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in Dockhand}
       APP_URL: ${PUBLIC_URL:?Set PUBLIC_URL in Dockhand}
@@ -38,6 +38,9 @@ services:
       APP_LICENCE_KEY: ${APP_LICENCE_KEY:-}
       APP_TRUSTED_PROXIES: "*"
       VITE_APP_NAME: tickets.mt
+      VITE_APP_LOGO_LIGHT: "${PUBLIC_URL}/storage/branding/logo.svg"
+      VITE_APP_LOGO_DARK: "${PUBLIC_URL}/storage/branding/logo.svg"
+      VITE_APP_FAVICON: "${PUBLIC_URL}/storage/branding/favicon.svg?v=1"
       VITE_FRONTEND_URL: ${PUBLIC_URL:?Set PUBLIC_URL in Dockhand}
       VITE_API_URL_CLIENT: ${PUBLIC_URL:?Set PUBLIC_URL in Dockhand}/api
       VITE_API_URL_SERVER: http://localhost:80/api
