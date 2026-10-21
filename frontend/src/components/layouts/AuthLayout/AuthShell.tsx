@@ -51,8 +51,8 @@ const FeaturePanel = () => {
                                     <span>Admit One</span>
                                     <span>№ 000482</span>
                                 </div>
-                                <div className={classes.ticketTitle}>Dublin Jazz Festival</div>
-                                <div className={classes.ticketMeta}>Sat, Aug 16 · 8:00 PM · Dublin</div>
+                                <div className={classes.ticketTitle}>Malta Music Festival</div>
+                                <div className={classes.ticketMeta}>Sat, Aug 15 · 9:00 PM · Floriana</div>
                                 <div className={classes.ticketFields}>
                                     <div className={classes.ticketField}>
                                         <span>Door</span>
