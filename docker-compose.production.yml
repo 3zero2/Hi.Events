@@ -72,6 +72,9 @@ services:
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-whsec_test_123456789}
     volumes:
       - /home/pi/AppData/tickets/storage:/app/backend/storage
+      # For web manifest icons
+      - /home/pi/AppData/tickets/branding/manifest-icons:/app/frontend/dist/client/manifest-icons:ro
+      - /home/pi/AppData/tickets/branding/site.webmanifest:/app/frontend/dist/client/site.webmanifest:ro
     depends_on:
       postgres:
         condition: service_healthy
