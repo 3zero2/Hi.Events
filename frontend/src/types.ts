@@ -760,6 +760,7 @@ export interface EventDuplicatePayload extends EventBase {
     duplicate_affiliates: boolean;
     duplicate_lineup: boolean;
     duplicate_occurrences?: boolean;
+    duplicate_email_templates?: boolean;
 }
 
 export enum EventStatus {
@@ -2110,6 +2111,7 @@ export interface JoinWaitlistRequest {
     first_name: string;
     last_name?: string;
     locale?: string;
+    promo_code?: string;
 }
 
 export interface WaitlistProductStats {
