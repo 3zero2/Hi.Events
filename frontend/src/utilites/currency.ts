@@ -281,6 +281,9 @@ const euroZoneCountries = [
 ] as const;
 
 export const getUserCurrency = (): CurrencyCode => {
+    // Temporarily force EUR for all users
+    return 'EUR';
+    
     if (typeof window === 'undefined') return 'USD';
 
     try {
